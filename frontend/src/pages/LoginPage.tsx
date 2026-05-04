@@ -6,6 +6,8 @@ import { apiService } from '../lib/api';
 import type { AuthUser } from '@shared/types/api';
 import { useLanguage } from '../lib/i18n';
 
+// Login Page v1.0.1
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const { t, toggleLanguage } = useLanguage();

@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 
+// Version: 1.0.1 - Modified for version tracking
+
 dotenv.config();
 
 import authRouter from './routes/auth';

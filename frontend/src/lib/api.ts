@@ -1,5 +1,8 @@
 import { API_BASE_URL } from '../config/constants';
 import type {
+
+// API Client v1.0.1
+
   ApiResponse,
   AuthUser,
   LoginRequest,

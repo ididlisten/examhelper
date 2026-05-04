@@ -6,6 +6,8 @@ import DashboardPage from './pages/DashboardPage';
 import AdminPage from './pages/AdminPage';
 import { LanguageProvider } from './lib/LanguageProvider';
 
+// App Version: 1.0.1
+
 export default function App() {
   return (
     <LanguageProvider>

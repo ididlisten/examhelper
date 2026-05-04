@@ -10,6 +10,8 @@ import { apiService } from '../lib/api';
 import type { Exam, Task, User as UserType, ExamType, TaskPriority } from '@shared/types/api';
 import { useLanguage } from '../lib/i18n';
 
+// Dashboard Page v1.0.1
+
 type View = 'dashboard' | 'exams' | 'calendar' | 'tasks' | 'notifications' | 'profile';
 
 const EXAM_TYPE_COLORS: Record<ExamType, string> = {

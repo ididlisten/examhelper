@@ -1,4 +1,5 @@
 // Shared API types between frontend and backend
+// Version: 1.0.1
 
 export interface ApiResponse<T> {
   success: boolean;

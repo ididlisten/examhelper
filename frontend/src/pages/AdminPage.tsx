@@ -10,6 +10,8 @@ import { apiService } from '../lib/api';
 import type { AdminStats, AdminUserListItem, SystemStatus, SystemAnnouncement } from '@shared/types/api';
 import { useLanguage } from '../lib/i18n';
 
+// Admin Page v1.0.1
+
 type AdminView = 'stats' | 'users' | 'system' | 'announcements';
 
 export default function AdminPage() {

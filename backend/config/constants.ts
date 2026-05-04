@@ -1,4 +1,5 @@
 // Backend configuration constants
+// Version: 1.0.1
 
 export const JWT_CONFIG = {
   secret: process.env.JWT_SECRET || 'exam-reminder-secret-key-2024',
