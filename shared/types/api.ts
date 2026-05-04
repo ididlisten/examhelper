@@ -16,6 +16,14 @@ export interface PaginatedResponse<T> {
   pageSize: number;
 }
 
+// User-Exam association
+export interface UserExamRelation {
+  userId: number;
+  examId: number;
+  enrolledAt: Date;
+  status: 'active' | 'completed' | 'cancelled';
+}
+
 // User types
 export type UserRole = 'user' | 'admin';
 export type UserStatus = 'active' | 'disabled';

@@ -40,6 +40,7 @@ app.use('/api/tasks', tasksRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/admin', adminRouter);
 
+// User-Exam association: Routes for managing user exam relationships
 // Serve frontend in production
 const REACT_BUILD_FOLDER = path.join(__dirname, '..', 'frontend', 'dist');
 app.use(express.static(REACT_BUILD_FOLDER));

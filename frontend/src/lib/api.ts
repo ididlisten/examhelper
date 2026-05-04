@@ -21,6 +21,7 @@ import type {
   SystemStatus,
   AdminUserListItem,
   SystemAnnouncement,
+  UserExamRelation,
 } from '@shared/types/api';
 
 function getToken(): string | null {
@@ -74,6 +75,12 @@ export const apiService = {
   },
   async deleteExam(id: string): Promise<ApiResponse<null>> {
     return request<null>(`/api/exams/${id}`, { method: 'DELETE' });
+  },
+  async enrollExam(examId: number): Promise<ApiResponse<UserExamRelation>> {
+    return request<UserExamRelation>(`/api/exams/${examId}/enroll`, { method: 'POST' });
+  },
+  async getUserExamRelations(): Promise<ApiResponse<UserExamRelation[]>> {
+    return request<UserExamRelation[]>('/api/exams/my-relations');
   },
 
   // Tasks

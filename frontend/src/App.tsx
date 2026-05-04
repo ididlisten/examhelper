@@ -17,6 +17,7 @@ export default function App() {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
+        {/* User-Exam association: Routes for exam enrollment */}
       </Routes>
       <Toaster position="top-right" richColors />
     </LanguageProvider>

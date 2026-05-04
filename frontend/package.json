@@ -2,6 +2,7 @@
   "name": "exam-reminder-frontend",
   "private": true,
   "version": "0.0.1",
+  "description": "User-Exam association feature",
   "type": "module",
   "scripts": {
     "dev": "vite",

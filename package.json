@@ -1,7 +1,7 @@
 {
   "name": "Omniflow fullstack Product",
   "version": "1.0.1",
-  "description": "",
+  "description": "User-Exam association feature",
   "main": "server.ts",
   "scripts": {
     "dev": "tsx watch backend/server.ts",

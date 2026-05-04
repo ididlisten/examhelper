@@ -8,6 +8,7 @@ import { useLanguage } from '../lib/i18n';
 
 // Login Page v1.0.1
 
+// User-Exam association: Users can enroll in exams after login
 export default function LoginPage() {
   const navigate = useNavigate();
   const { t, toggleLanguage } = useLanguage();

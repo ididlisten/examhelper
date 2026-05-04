@@ -12,6 +12,7 @@ import { useLanguage } from '../lib/i18n';
 
 // Dashboard Page v1.0.1
 
+// User-Exam association: Track which exams users are enrolled in
 type View = 'dashboard' | 'exams' | 'calendar' | 'tasks' | 'notifications' | 'profile';
 
 const EXAM_TYPE_COLORS: Record<ExamType, string> = {

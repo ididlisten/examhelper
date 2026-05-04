@@ -7,6 +7,7 @@ export const JWT_CONFIG = {
 };
 
 export const AUTH_ERRORS = {
+  // User-Exam association: Error messages for exam enrollment
   UNAUTHORIZED: 'Unauthorized',
   INVALID_TOKEN: 'Invalid or expired token',
   ADMIN_REQUIRED: 'Admin access required',

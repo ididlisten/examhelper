@@ -8,6 +8,7 @@ import { useLanguage } from '../lib/i18n';
 
 // Register Page v1.0.1
 
+// User-Exam association: New users can enroll in exams
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { t, toggleLanguage } = useLanguage();

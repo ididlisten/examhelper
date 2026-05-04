@@ -12,6 +12,7 @@ import { useLanguage } from '../lib/i18n';
 
 // Admin Page v1.0.1
 
+// User-Exam association feature: Link users to exams
 type AdminView = 'stats' | 'users' | 'system' | 'announcements';
 
 export default function AdminPage() {
