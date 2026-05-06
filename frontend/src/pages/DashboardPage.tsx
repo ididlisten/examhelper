@@ -40,13 +40,16 @@ const PRIORITY_COLORS: Record<TaskPriority, string> = {
 function getDaysUntil(dateStr: string): number {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const examDate = new Date(dateStr);
-  examDate.setHours(0, 0, 0, 0);
-  return Math.ceil((examDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const targetDate = new Date(dateStr);
+  targetDate.setHours(0, 0, 0, 0);
+  const timeDiff = targetDate.getTime() - today.getTime();
+  const days = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+  return days;
 }
 
 function formatDate(dateStr: string, lang: string): string {
-  return new Date(dateStr).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+  const locale = lang === 'zh' ? 'zh-CN' : 'en-US';
+  return new Date(dateStr).toLocaleDateString(locale, {
     month: 'short', day: 'numeric', year: 'numeric'
   });
 }
@@ -345,34 +348,38 @@ export default function DashboardPage() {
   };
 
   const upcomingExams = exams
-    .filter(e => e.status === 'upcoming' && getDaysUntil(e.examDate) >= 0)
-    .sort((a, b) => new Date(a.examDate).getTime() - new Date(b.examDate).getTime());
+    .filter(exam => exam.status === 'upcoming' && getDaysUntil(exam.examDate) >= 0)
+    .sort((examA, examB) => {
+      const dateA = new Date(examA.examDate).getTime();
+      const dateB = new Date(examB.examDate).getTime();
+      return dateA - dateB;
+    });
 
-  const pendingTasks = tasks.filter(t2 => t2.status === 'pending');
-  const completedTasks = tasks.filter(t2 => t2.status === 'completed');
+  const pendingTasks = tasks.filter(task => task.status === 'pending');
+  const completedTasks = tasks.filter(task => task.status === 'completed');
 
-  const examTypeLabels: Record<ExamType, string> = {
+  const examTypeLabels: Record<ExamType, string> = Object.freeze({
     midterm: t.midterm,
     final: t.final,
     quiz: t.quiz,
     certification: t.certification,
     other: t.other,
-  };
+  });
 
-  const priorityLabels: Record<TaskPriority, string> = {
+  const priorityLabels: Record<TaskPriority, string> = Object.freeze({
     low: t.low,
     medium: t.medium,
     high: t.high,
-  };
+  });
 
-  const navItems: { id: View; label: string; icon: React.ReactNode }[] = [
+  const navItems: { id: View; label: string; icon: React.ReactNode }[] = Object.freeze([
     { id: 'dashboard', label: t.dashboard, icon: <LayoutDashboard className="w-5 h-5" /> },
     { id: 'exams', label: t.myExams, icon: <BookOpen className="w-5 h-5" /> },
     { id: 'calendar', label: t.calendar, icon: <Calendar className="w-5 h-5" /> },
     { id: 'tasks', label: t.tasks, icon: <CheckSquare className="w-5 h-5" /> },
     { id: 'notifications', label: t.reminders, icon: <Bell className="w-5 h-5" /> },
     { id: 'profile', label: t.profile, icon: <User className="w-5 h-5" /> },
-  ];
+  ]);
 
   if (loading) {
     return (
