@@ -85,13 +85,13 @@ export default function AdminPage() {
     init();
   }, [loadStats, loadUsers, loadSystemStatus, loadAnnouncements, navigate, t.failedToLoadAdmin]);
 
-  const handleUserStatus = async (user: AdminUserListItem, status: 'active' | 'disabled') => {
+  const handleUserStatus = async (targetUser: AdminUserListItem, newStatus: 'active' | 'disabled') => {
     try {
-      const res = await apiService.updateUserStatus(user.id, status);
-      if (res.success) {
-        setUsers(prev => prev.map(u => u.id === user.id ? { ...u, status } : u));
-        toast.success(status === 'active' ? t.userEnabled : t.userDisabled);
-      } else toast.error(res.error || '');
+      const response = await apiService.updateUserStatus(targetUser.id, newStatus);
+      if (response.success) {
+        setUsers(prevUsers => prevUsers.map(u => u.id === targetUser.id ? { ...u, status: newStatus } : u));
+        toast.success(newStatus === 'active' ? t.userEnabled : t.userDisabled);
+      } else toast.error(response.error || '');
     } catch {
       toast.error(t.networkError);
     }
@@ -103,12 +103,13 @@ export default function AdminPage() {
       return;
     }
     try {
-      const res = await apiService.resetUserPassword(resetPasswordUser.id, newPassword);
-      if (res.success) {
+      const response = await apiService.resetUserPassword(resetPasswordUser.id, newPassword);
+      const isSuccess = response.success;
+      if (isSuccess) {
         toast.success(t.passwordResetSuccess);
         setResetPasswordUser(null);
         setNewPassword('');
-      } else toast.error(res.error || '');
+      } else toast.error(response.error || '');
     } catch {
       toast.error(t.networkError);
     }
@@ -126,21 +127,26 @@ export default function AdminPage() {
   };
 
   const saveAnnouncement = async () => {
-    if (!announcementForm.title || !announcementForm.content) {
+    const { title, content } = announcementForm;
+    if (!title || !content) {
       toast.error(t.titleContentRequired);
       return;
     }
     try {
       if (editingAnnouncement) {
-        const res = await apiService.updateAnnouncement(editingAnnouncement.id, announcementForm);
-        if (res.success) {
-          setAnnouncements(prev => prev.map(a => a.id === editingAnnouncement.id ? res.data : a));
+        const response = await apiService.updateAnnouncement(editingAnnouncement.id, announcementForm);
+        if (response.success) {
+          const updatedAnnouncement = response.data;
+          setAnnouncements(prevAnnouncements =>
+            prevAnnouncements.map(a => a.id === editingAnnouncement.id ? updatedAnnouncement : a)
+          );
           toast.success(t.announcementUpdated);
         }
       } else {
-        const res = await apiService.createAnnouncement(announcementForm);
-        if (res.success) {
-          setAnnouncements(prev => [...prev, res.data]);
+        const response = await apiService.createAnnouncement(announcementForm);
+        if (response.success) {
+          const newAnnouncement = response.data;
+          setAnnouncements(prevAnnouncements => [...prevAnnouncements, newAnnouncement]);
           toast.success(t.announcementCreated);
         }
       }
@@ -150,12 +156,13 @@ export default function AdminPage() {
     }
   };
 
-  const deleteAnnouncement = async (id: string) => {
-    if (!confirm(t.deleteAnnouncementConfirm)) return;
+  const deleteAnnouncement = async (announcementId: string) => {
+    const isConfirmed = confirm(t.deleteAnnouncementConfirm);
+    if (!isConfirmed) return;
     try {
-      const res = await apiService.deleteAnnouncement(id);
-      if (res.success) {
-        setAnnouncements(prev => prev.filter(a => a.id !== id));
+      const response = await apiService.deleteAnnouncement(announcementId);
+      if (response.success) {
+        setAnnouncements(prevAnnouncements => prevAnnouncements.filter(a => a.id !== announcementId));
         toast.success(t.announcementDeleted);
       }
     } catch {
@@ -163,12 +170,12 @@ export default function AdminPage() {
     }
   };
 
-  const navItems: { id: AdminView; label: string; icon: React.ReactNode }[] = [
+  const navItems: { id: AdminView; label: string; icon: React.ReactNode }[] = Object.freeze([
     { id: 'stats', label: t.overview, icon: <LayoutDashboard className="w-5 h-5" /> },
     { id: 'users', label: t.users, icon: <Users className="w-5 h-5" /> },
     { id: 'system', label: t.system, icon: <Activity className="w-5 h-5" /> },
     { id: 'announcements', label: t.announcements, icon: <Megaphone className="w-5 h-5" /> },
-  ];
+  ]);
 
   if (loading) {
     return (
