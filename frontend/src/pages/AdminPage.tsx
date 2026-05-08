@@ -115,7 +115,7 @@ export default function AdminPage() {
     }
   };
 
-  const openAnnouncementForm = (ann?: SystemAnnouncement) => {
+  const openAnnouncementModal = (ann?: SystemAnnouncement) => {
     if (ann) {
       setEditingAnnouncement(ann);
       setAnnouncementForm({ title: ann.title, content: ann.content });
@@ -128,25 +128,26 @@ export default function AdminPage() {
 
   const saveAnnouncement = async () => {
     const { title, content } = announcementForm;
-    if (!title || !content) {
+    
+    const isFormValid = title.trim() && content.trim();
+    if (!isFormValid) {
       toast.error(t.titleContentRequired);
       return;
     }
+
     try {
       if (editingAnnouncement) {
         const response = await apiService.updateAnnouncement(editingAnnouncement.id, announcementForm);
         if (response.success) {
           const updatedAnnouncement = response.data;
-          setAnnouncements(prevAnnouncements =>
-            prevAnnouncements.map(a => a.id === editingAnnouncement.id ? updatedAnnouncement : a)
-          );
+          setAnnouncements(prev => prev.map(a => a.id === editingAnnouncement.id ? updatedAnnouncement : a));
           toast.success(t.announcementUpdated);
         }
       } else {
         const response = await apiService.createAnnouncement(announcementForm);
         if (response.success) {
           const newAnnouncement = response.data;
-          setAnnouncements(prevAnnouncements => [...prevAnnouncements, newAnnouncement]);
+          setAnnouncements(prev => [...prev, newAnnouncement]);
           toast.success(t.announcementCreated);
         }
       }
@@ -157,12 +158,13 @@ export default function AdminPage() {
   };
 
   const deleteAnnouncement = async (announcementId: string) => {
-    const isConfirmed = confirm(t.deleteAnnouncementConfirm);
-    if (!isConfirmed) return;
+    const userConfirmed = confirm(t.deleteAnnouncementConfirm);
+    if (!userConfirmed) return;
+
     try {
-      const response = await apiService.deleteAnnouncement(announcementId);
-      if (response.success) {
-        setAnnouncements(prevAnnouncements => prevAnnouncements.filter(a => a.id !== announcementId));
+      const apiResponse = await apiService.deleteAnnouncement(announcementId);
+      if (apiResponse.success) {
+        setAnnouncements(current => current.filter(a => a.id !== announcementId));
         toast.success(t.announcementDeleted);
       }
     } catch {
@@ -479,7 +481,7 @@ export default function AdminPage() {
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">{t.announcementsCount(announcements.length)}</p>
                 <button
-                  onClick={() => openAnnouncementForm()}
+                  onClick={() => openAnnouncementModal()}
                   className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
@@ -513,7 +515,7 @@ export default function AdminPage() {
                         </div>
                         <div className="flex items-center gap-1 flex-shrink-0">
                           <button
-                            onClick={() => openAnnouncementForm(ann)}
+                            onClick={() => openAnnouncementModal(ann)}
                             className="p-1.5 rounded-lg hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
